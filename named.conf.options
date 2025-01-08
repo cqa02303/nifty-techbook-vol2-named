@@ -1,0 +1,71 @@
+options {
+	directory "/var/cache/bind";
+
+	version "unknown";
+	dump-file	"/tmp/named_dump.db";
+	statistics-file "/dump/named.stats";
+	auth-nxdomain no;
+
+	// If there is a firewall between you and nameservers you want
+	// to talk to, you may need to fix the firewall to allow multiple
+	// ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+	// If your ISP provided one or more IP addresses for stable 
+	// nameservers, you probably want to use them as forwarders.  
+	// Uncomment the following block, and insert the addresses replacing 
+	// the all-0's placeholder.
+
+	// forwarders {
+	// 	0.0.0.0;
+	// };
+
+	//========================================================================
+	// If BIND logs error messages about the root key being expired,
+	// you will need to update your keys.  See https://www.isc.org/bind-keys
+	//========================================================================
+	dnssec-validation auto;
+
+	listen-on-v6 { any; };
+};
+
+logging {
+
+	channel "log_queries" {
+		file "/var/cache/bind/queries.log" versions 5 size 10m;
+		severity info;
+		print-time yes;
+		print-severity yes;
+		print-category yes;
+	};
+
+	# syslogの設定
+	channel "default-log" {
+		# syslog local7; # local7.infoにてsyslog出力
+		file "/var/cache/bind/named.log" versions 5 size 10m;
+		severity info;
+		print-time yes;
+		print-severity yes;
+		print-category yes;
+	};
+
+	# rndcコマンド実行時に出力されるQuerylog
+	channel "default_debug" {
+		file "named.run"; # rndcコマンドで出力させるログファイル名
+		severity dynamic;
+	};
+
+	# 上記で設定したsyslogとquerylogの有効化(channelだけでは有効にならないため要注意)
+	category queries {
+		"log_queries";
+	};
+
+	category default {
+		"default-log";
+		"default_debug";
+	};
+
+	category "lame-servers" {
+		"null";
+	};
+};
+
