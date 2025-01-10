@@ -1,5 +1,6 @@
 # podman build --network host -t pull_named_update:20250109 .
-#
+# generate container image pull_named_update path (path)
+
 FROM docker.io/ubuntu:latest
 
 USER root

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG=/log/gitpull.log
+LOG=/var/log/bind/gitpull.log
 BUID=100 # podman exec named id -u bind
 BGID=101 # podman exec named id -g bind
 
@@ -37,3 +37,7 @@ if [ $rst = 1 ]; then
         rndc reload >> $LOG
 fi
 
+echo wait 1min
+sleep 60
+echo exit error status for next startup
+exit 255
