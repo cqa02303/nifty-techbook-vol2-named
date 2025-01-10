@@ -1,6 +1,8 @@
 #!/bin/bash
 
 LOG=/log/gitpull.log
+BUID=100 # podman exec named id -u bind
+BGID=101 # podman exec named id -g bind
 
 cd /
 
@@ -26,8 +28,8 @@ else
 fi
 
 # bindにファイルを渡すためオーナーを変更
-chown -R bind:bind /log >> $LOG 2>&1
-chown -R bind:bind /nifty-techbook-vol2-named >> $LOG 2>&1
+chown -R $BUID:$BGID /log >> $LOG 2>&1
+chown -R $BUID:$BGID /nifty-techbook-vol2-named >> $LOG 2>&1
 
 # 更新されていればrndc reload / reconfig
 if [ $rst = 1 ]; then

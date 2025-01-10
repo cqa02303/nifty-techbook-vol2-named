@@ -1,14 +1,11 @@
-# command.1
-# podman build -t pull_named_update:20240212 .
+# podman build --network host -t pull_named_update:20250109 .
 #
-# command.2
-# generate container image pull_named_config path .
-#
-FROM internetsystemsconsortium/bind9:9.18
+FROM docker.io/ubuntu:latest
 
 USER root
 
-RUN apt update -y && apt upgrade -y && apt install -y git
+RUN apt update -y && apt upgrade -y && apt install -y git bind9-utils
+
 RUN git config --global --add safe.directory /nifty-techbook-vol2-named
 COPY gitpull.sh /gitpull.sh
 RUN chmod +x /gitpull.sh
